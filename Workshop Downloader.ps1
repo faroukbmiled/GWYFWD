@@ -1,6 +1,6 @@
-﻿$Url = "http://workshop7.abcvg.info/archive/431240/2157555053.zip"
+﻿$Url = "http://workshop4.abcvg.info/archive/431240/1357761075.zip"
 
-$cpitem = "C:\Program Files (x86)\Steam\steamapps\workshop\content\480\2157555053"
+$cpitem = "C:\Program Files (x86)\Steam\steamapps\workshop\content\480\1357761075"
 
 $default = "C:\Program Files (x86)\Steam\steamapps\workshop\content\480\2335511276"
 
