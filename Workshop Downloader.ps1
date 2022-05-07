@@ -1,6 +1,6 @@
 ﻿$id = 1520891664
 
-$Url = "http://workshop6.abcvg.info/archive/431240/$id.zip"
+$Url = "http://workshop5.abcvg.info/archive/431240/$id.zip"
 
 $cpitem = "$env:userprofile\AppData\Local\Temp\$id"
 
