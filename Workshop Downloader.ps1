@@ -8,6 +8,8 @@ $DownloadZipFile = "C:\Program Files (x86)\Steam\steamapps\workshop\content\" + 
 
 $ExtractPath = "C:\Program Files (x86)\Steam\steamapps\workshop\content\480"
 
+Get-ChildItem -Path $default -Include * -File -Recurse | foreach { $_.Delete()}
+
 Invoke-WebRequest -Uri $Url -OutFile $DownloadZipFile
 
 $ExtractShell = New-Object -ComObject Shell.Application 
