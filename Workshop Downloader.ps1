@@ -1,6 +1,8 @@
-﻿$id = 1415958558
+﻿$n = 2
 
-$Url = "http://workshop2.abcvg.info/archive/431240/$id.zip"
+$id = 1415958558
+
+$Url = "http://workshop$n.abcvg.info/archive/431240/$id.zip"
 
 $cpitem = "$env:userprofile\AppData\Local\Temp\$id"
 
