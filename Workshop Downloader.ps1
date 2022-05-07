@@ -1,12 +1,12 @@
 ﻿$Url = "http://workshop8.abcvg.info/archive/431240/2362573235.zip"
 
-$cpitem = "C:\Program Files (x86)\Steam\steamapps\workshop\content\480\2362573235"
+$cpitem = "$env:userprofile\AppData\Local\Temp\2362573235"
 
 $default = "C:\Program Files (x86)\Steam\steamapps\workshop\content\480\2335511276"
 
-$DownloadZipFile = "C:\Program Files (x86)\Steam\steamapps\workshop\content\" + $(Split-Path -Path $Url -Leaf)
+$DownloadZipFile = "$env:userprofile\AppData\Local\Temp" + $(Split-Path -Path $Url -Leaf)
 
-$ExtractPath = "C:\Program Files (x86)\Steam\steamapps\workshop\content\480"
+$ExtractPath = "$env:userprofile\AppData\Local\Temp"
 
 Get-ChildItem -Path $default -Include * -File -Recurse | foreach { $_.Delete()}
 
