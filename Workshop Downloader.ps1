@@ -1,6 +1,4 @@
-﻿Invoke-WebRequest -Uri $Url -OutFile $DownloadZipFile
-
-$Url = "http://workshop2.abcvg.info/archive/431240/1415958558.zip"
+﻿$Url = "http://workshop2.abcvg.info/archive/431240/1415958558.zip"
 
 $cpitem = "C:\Program Files (x86)\Steam\steamapps\workshop\content\480\1415958558"
 
@@ -9,6 +7,8 @@ $default = "C:\Program Files (x86)\Steam\steamapps\workshop\content\480\23355112
 $DownloadZipFile = "C:\Program Files (x86)\Steam\steamapps\workshop\content\" + $(Split-Path -Path $Url -Leaf)
 
 $ExtractPath = "C:\Program Files (x86)\Steam\steamapps\workshop\content\480"
+
+Invoke-WebRequest -Uri $Url -OutFile $DownloadZipFile
 
 $ExtractShell = New-Object -ComObject Shell.Application 
 
