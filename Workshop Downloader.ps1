@@ -23,5 +23,9 @@ $ExtractFiles = $ExtractShell.Namespace($DownloadZipFile).Items()
 $ExtractShell.NameSpace($ExtractPath).CopyHere($ExtractFiles)
 
 Get-ChildItem -Path $cpitem -Recurse -Force |
-  Where-Object {$_.LastWriteTime -lt (Get-date).AddDays(-31)} |
-  Move-Item -destination $default -Force
+
+Where-Object {$_.LastWriteTime -lt (Get-date).AddDays(-31)} |
+
+Move-Item -destination $default -Force
+
+Remove-Item -Path $cpitem -Recurse -Force -ErrorAction SilentlyContinue
