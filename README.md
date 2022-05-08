@@ -7,4 +7,4 @@ Custom Workshop Downloader For GWYF
 
 ## Usage: <br />
 1- Clone the repo "git clone https://github.com/faroukbmiled/GWYFWD.git" <br />
-2- Run the update.exe
+2- Run "Updater.exe"
