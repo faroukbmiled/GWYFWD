@@ -6,6 +6,8 @@ $Url = "http://workshop$n.abcvg.info/archive/431240/$id.zip"
 
 $cpitem = "$env:userprofile\AppData\Local\Temp\$id"
 
+$progressPreference = 'silentlyContinue'
+
 $default = "C:\Program Files (x86)\Steam\steamapps\workshop\content\480\2335511276"
 
 $DownloadZipFile = "$env:userprofile\AppData\Local\Temp" + $(Split-Path -Path $Url -Leaf)
