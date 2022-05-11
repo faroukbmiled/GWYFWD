@@ -1,6 +1,6 @@
-﻿$n = 8
+﻿$n = 9
 
-$id = 2381493230
+$id = 2749497901
 
 $Url = "http://workshop$n.abcvg.info/archive/431240/$id.zip"
 
@@ -25,8 +25,6 @@ $ExtractFiles = $ExtractShell.Namespace($DownloadZipFile).Items()
 $ExtractShell.NameSpace($ExtractPath).CopyHere($ExtractFiles)
 
 Get-ChildItem -Path $cpitem -Recurse -Force |
-
-Where-Object {$_.LastWriteTime -lt (Get-date).AddDays(-31)} |
 
 Move-Item -destination $default -Force
 
