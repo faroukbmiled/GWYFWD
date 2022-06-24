@@ -1,6 +1,6 @@
-﻿$n = 8
+﻿$n = 7
 
-$id = 2241270671
+$id = 2102640262
 
 $Url = "http://workshop$n.abcvg.info/archive/431240/$id.zip"
 
