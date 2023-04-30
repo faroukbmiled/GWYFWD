@@ -33,17 +33,27 @@ while True:
             saved_link = ''
 
         print("\n[*] Checking for updates...")
-        response = requests.get('https://gwyfwd.deathn0te.repl.co')
-        current_link = response.text.strip().split()[0]
-        id = response.text.strip().split()[0]
+        try:
+            response = requests.get('https://gwyfwd.deathn0te.repl.co')
+            if response.status_code != 200:
+                print(f"\n[!] Error fetching API\n")
+                print("[*] Redirecting to Enter Workshop id...")
+                current_link = saved_link
+            elif response.status_code == 200:
+                current_link = response.text.strip().split()[0]
+                id = response.text.strip().split()[0]
+        except:
+            print(f"[!] Error fetching API\n")
+            print("[*] Redirecting to Enter Workshop id...\n")
+            current_link = saved_link
 
         if current_link != saved_link:
             print("\n[+] An update found.\n")
             with open('workshop.json', 'w') as f:
                 json.dump(current_link, f)
         else:
-            print("\n[-] No updates found...\n")
-            id = input("[!] Enter Workshop id (enter for same map):") or saved_link
+            print("\n[-] No updates found.\n")
+            id = input("[!] Enter Workshop id (press enter for the same map):") or saved_link
             print("\n")
 
         if not os.path.exists('settings.ini'):
@@ -83,7 +93,7 @@ while True:
                 if response.status_code == 200:
                     break
         except:
-            print("[NetErr] Workshop Server error, try again or try another map")
+            print("[!NetErr] Workshop Server error, try again or try another map")
             exit()
 
         cpitem = os.path.join(os.environ['USERPROFILE'], 'AppData', 'Local', 'Temp', id)
