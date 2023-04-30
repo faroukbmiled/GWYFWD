@@ -41,7 +41,7 @@ try:
             json.dump(current_link, f)
     else:
         print("\n[-] No updates found...\n")
-        id = input("Enter Workshop id (enter to downlaod same map):") or saved_link
+        id = input("[!] Enter Workshop id (enter for same map):") or saved_link
         print("\n")
 
     if not os.path.exists('settings.ini'):
@@ -122,7 +122,8 @@ try:
     except:
         print("\n[Err] Failed to delete junk, script is passing anyway\n")
         pass
-    print('\n[✓] Done!')
+    print('\n[✓] Done!\n')
+    input("Press Enter to exit...")
 
 except:
     print("[Err] Unexpexted error occured ,contact Ryuk to debug")
