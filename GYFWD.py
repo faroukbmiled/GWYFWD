@@ -31,7 +31,7 @@ try:
         saved_link = ''
 
     print("\n[*] Checking for updates...")
-    response = requests.get('https://raw.githubusercontent.com/faroukbmiled/GWYFWD/main/vars.txt')
+    response = requests.get('https://gwyfwd.deathn0te.repl.co')
     current_link = response.text.strip().split()[0]
     id = response.text.strip().split()[0]
 
