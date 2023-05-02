@@ -7,7 +7,6 @@
 
 ## Requirements (powershell): <br />
 - https://github.com/git-for-windows/git/releases/download/v2.36.0.windows.1/Git-2.36.0-64-bit.exe <br />
-- Powershell (msstore) <br />
 
 ## Usage (Python): <br />
 1- run the script using : python GWYFWD.py <br />
