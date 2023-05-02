@@ -34,16 +34,40 @@ while True:
 
         print("\n[*] Checking for updates...")
         try:
-            response = requests.get('https://gwyfwd.deathn0te.repl.co')
-            if response.status_code != 200:
-                print(f"\n[!] Error fetching API\n")
+            headers = {'Authorization': 'Token tokenhere'}
+            response = requests.get('https://gwyfwd.deathn0te.repl.co/api/mapid/', headers=headers)
+
+            if response.status_code == 200:
+                mapid = response.json()['mapid']
+                current_link = str(mapid)
+                id = str(mapid)
+
+            elif response.status_code == 401:
+                auth_url = 'https://gwyfwd.deathn0te.repl.co/api-token-auth/'
+                auth_data = {'username': 'adminusername', 'password': 'adminpass'}
+                auth_headers = {'Content-Type': 'application/json'}
+                auth_response = requests.post(auth_url, data=json.dumps(auth_data), headers=auth_headers)
+
+                if auth_response.status_code == 200:
+                    new_token = auth_response.json()['token']
+                    headers = {'Authorization': 'Token ' + new_token}
+                    response = requests.get('https://gwyfwd.deathn0te.repl.co/api/mapid/', headers=headers)
+
+                    if response.status_code == 200:
+                        mapid = response.json()['mapid']
+                        current_link = str(mapid)
+                        id = str(mapid)
+                    else:
+                        print("\n[!] Error fetching API\n")
+                        print("[*] Redirecting to Enter Workshop id...")
+                        current_link = saved_link
+            else:
+                print("\n[!] Error fetching API\n")
                 print("[*] Redirecting to Enter Workshop id...")
                 current_link = saved_link
-            elif response.status_code == 200:
-                current_link = response.text.strip().split()[0]
-                id = response.text.strip().split()[0]
+
         except:
-            print(f"[!] Error fetching API\n")
+            print("[!] Error fetching API\n")
             print("[*] Redirecting to Enter Workshop id...\n")
             current_link = saved_link
 
