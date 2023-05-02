@@ -25,6 +25,16 @@ print('*****************************************')
 
 while True:
     try:
+        url = "https://gwyfwd.deathn0te.repl.co/api/status/?format=json"
+        try:
+            response = requests.get(url)
+            if response.status_code == 200:
+                print(f"\n[✓] API Status: OK")
+            elif response.status_code != 200:
+                print("\n[X] API Status: Down...")
+        except:
+            print("\n[X] Failed to connect to the API")
+            pass
 
         if os.path.isfile('workshop.json'):
             with open('workshop.json', 'r') as f:
@@ -44,7 +54,7 @@ while True:
 
             elif response.status_code == 401:
                 auth_url = 'https://gwyfwd.deathn0te.repl.co/api-token-auth/'
-                auth_data = {'username': 'adminusername', 'password': 'adminpass'}
+                auth_data = {'username': 'ryuk', 'passhere': 'passhere'}
                 auth_headers = {'Content-Type': 'application/json'}
                 auth_response = requests.post(auth_url, data=json.dumps(auth_data), headers=auth_headers)
 
