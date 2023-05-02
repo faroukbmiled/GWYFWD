@@ -54,7 +54,7 @@ while True:
 
             elif response.status_code == 401:
                 auth_url = 'https://gwyfwd.deathn0te.repl.co/api-token-auth/'
-                auth_data = {'username': 'ryuk', 'passhere': 'passhere'}
+                auth_data = {'username': 'usernamehere', 'password': 'passhere'}
                 auth_headers = {'Content-Type': 'application/json'}
                 auth_response = requests.post(auth_url, data=json.dumps(auth_data), headers=auth_headers)
 
