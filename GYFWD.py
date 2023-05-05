@@ -69,9 +69,6 @@ while True:
                     with open('RGWYFWD.exe.new', 'wb') as f:
                         shutil.copyfileobj(response.raw, f)
                     print('\n[*] Update downloaded. running update script and exiting...')
-                    cleaner = requests.get('https://gwyfwd.deathn0te.repl.co/static/cleaner.bat', stream=True)
-                    with open('cleaner.bat', 'wb') as f:
-                        shutil.copyfileobj(cleaner.raw, f)
                     os.system("start /wait cmd /c cleaner.bat")
                     break
             else:
