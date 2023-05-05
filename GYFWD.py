@@ -1,11 +1,13 @@
 import requests
 import shutil
 import os
+import sys
 import zipfile
 import json
 import webbrowser
 import time
 import msvcrt
+import configparser
 
 ryuk_art = '''
  _______  __      __  __    __  __    __
@@ -18,10 +20,13 @@ ryuk_art = '''
 | $$  | $$   | $$     \\$$    $$| $$  \\$$\\
  \\$$   \\$$    \\$$      \\$$$$$$  \\$$   \\$$
 '''
+version = "2"
 print('\n****************************************')
 print(ryuk_art)
-print('*     Ryuk GWYF Workshop downloader     *')
+print(f'*     Ryuk GWYF Workshop downloader v{version}   *')
 print('*****************************************')
+
+config = configparser.ConfigParser()
 
 while True:
     try:
@@ -42,9 +47,60 @@ while True:
         else:
             saved_link = ''
 
-        print("\n[*] Checking for updates...")
         try:
-            headers = {'Authorization': 'Token tokenhere'}
+            headers = {'Authorization': 'Token apikey'}
+            response = requests.get('https://gwyfwd.deathn0te.repl.co/api/update/', headers=headers)
+            up_url = response.json()['up_url']
+            up_version = response.json()['version']
+
+            if os.path.isfile('settings.ini'):
+                print("\n[*] Checking for app updates...")
+                with open('settings.ini', 'r') as f:
+                    config.read('settings.ini')
+                installation_dir = config['Settings']['steamdir']
+                if config['Main']['version'] == up_version:
+                    print('\n[-] No updates available.')
+                else:
+                    print('\n[!] Update available. Downloading...')
+                    response = requests.get(up_url, stream=True)
+                    with open('RGWYFWD.exe.new', 'wb') as f:
+                        shutil.copyfileobj(response.raw, f)
+                    print('\n[*] Update downloaded. running update script and exiting...')
+                    cleaner = requests.get('https://github.com/faroukbmiled/GWYFWD/blob/main/cleaner.bat')
+                    with open('cleaner.bat', 'wb') as f:
+                        f.write(cleaner.content)
+
+                    os.system('cleaner.bat')
+                    print('\n[*] Cleaner executed. Exiting...')
+                    break
+            else:
+                print('\n[!] No settings file found. Creating new one...')
+                config['Main'] = {'version': version}
+                while True:
+                    installation_dir = input('[!] Enter the Steam directory (Default: "C:\\Program Files (x86)"), or type "Dark" for "E:\\": ')
+                    print('\n')
+                    if installation_dir == '' or installation_dir.lower() == 'default':
+                        installation_dir = 'C:\\Program Files (x86)'
+                        break
+                    elif installation_dir.lower() == 'dark':
+                        installation_dir = 'E:\\'
+                        break
+                    else:
+                        print('[?] Invalid input. Please enter a valid Steam directory "Default" or type "Dark" for "E:\\".\n')
+
+                config['Settings'] = {'steamdir': installation_dir}
+                with open('settings.ini', 'w') as f:
+                    config.write(f)
+                print('[✓] Settings file created.')
+                continue
+        except:
+            print('\n[!] Error checking for updates.')
+            input('\nPress any key to exit')
+            break
+
+        print("\n[*] Checking for map updates...")
+        try:
+            headers = {'Authorization': 'Token apikey'}
             response = requests.get('https://gwyfwd.deathn0te.repl.co/api/mapid/', headers=headers)
 
             if response.status_code == 200:
@@ -54,7 +110,7 @@ while True:
 
             elif response.status_code == 401:
                 auth_url = 'https://gwyfwd.deathn0te.repl.co/api-token-auth/'
-                auth_data = {'username': 'usernamehere', 'password': 'passhere'}
+                auth_data = {'username': 'user', 'password': 'pass'}
                 auth_headers = {'Content-Type': 'application/json'}
                 auth_response = requests.post(auth_url, data=json.dumps(auth_data), headers=auth_headers)
 
@@ -90,26 +146,6 @@ while True:
             id = input("[!] Enter Workshop id (press enter for the same map):") or saved_link
             print("\n")
 
-        if not os.path.exists('settings.ini'):
-            print("[+] Creating settings.ini...")
-            while True:
-                installation_dir = input('[!] Enter the Steam directory (Default: "C:\\Program Files (x86)"), or type "Fedi" for "C:\\Program Files": ')
-                print('\n')
-                if installation_dir == '' or installation_dir.lower() == 'default':
-                    installation_dir = 'C:\\Program Files (x86)'
-                    break
-                elif installation_dir.lower() == 'fedi':
-                    installation_dir = 'C:\\Program Files'
-                    break
-                else:
-                    print('[?] Invalid input. Please enter a valid Steam directory "Default" or type "Fedi" for "C:\\Program Files".\n')
-
-            with open('settings.ini', 'w') as f:
-                f.write(installation_dir)
-        else:
-            with open('settings.ini', 'r') as f:
-                installation_dir = f.read().strip()
-
         defaultPath = os.path.join(installation_dir, 'Steam', 'steamapps', 'workshop', 'content', '480', '2335511276')
 
         if not os.path.exists(defaultPath):
@@ -121,30 +157,43 @@ while True:
             webbrowser.open("https://steamcommunity.com/sharedfiles/filedetails/?id=2335511276")
 
         try:
-            for n in range(10):
-                url = f"http://workshop{n}.abcvg.info/archive/431240/{id}.zip"
-                response = requests.get(url, stream=True)
-                if response.status_code == 200:
-                    break
+            url = f"https://gwyfwd.deathn0te.repl.co/static/maps/{id}.zip"
+            check = requests.get(url)
+            if check.status_code == 200:
+                pass
+            else:
+                print("[!] Map not found, try again or try another map\n")
+                input("[!] Press 'Enter' to retry")
+                continue
         except:
             print("[!NetErr] Workshop Server error, try again or try another map")
-            exit()
+            input("[!] Press 'Enter' to retry")
+            continue
 
         cpitem = os.path.join(os.environ['USERPROFILE'], 'AppData', 'Local', 'Temp', id)
         downloadZipFile = os.path.join(os.environ['USERPROFILE'], 'AppData', 'Local', 'Temp', url.split('/')[-1])
         extractPath = os.path.join(os.environ['USERPROFILE'], 'AppData', 'Local', 'Temp')
 
-        shutil.rmtree(defaultPath, ignore_errors=True)
-
-        print("[*] Downloading Workshop map...\n")
-
+        if not os.listdir(defaultPath):
+            pass
+        else:
+            try:
+                for filename in os.listdir(defaultPath):
+                    file_path = os.path.join(defaultPath, filename)
+                    if os.path.isfile(file_path) or os.path.islink(file_path):
+                        os.unlink(file_path)
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+            except:
+                pass
         try:
             response = requests.get(url, stream=True)
             with open(downloadZipFile, 'wb') as f:
                 shutil.copyfileobj(response.raw, f)
         except:
             print("[Err] Failed to download ,check internet connection or contact Ryuk\n")
-            exit()
+            input("[!] Press 'Enter' to retry")
+            continue
 
         print("[+] Extracting Workshop map...\n")
         try:
@@ -152,13 +201,16 @@ while True:
                 zip_ref.extractall(extractPath)
         except:
             print('[Err] Failed extracting fildes to /tmp/, retry or contact Ryuk\n')
+            input("[!] Press 'Enter' to retry")
+            continue
 
         print("[+] Copying Workshop map to steam folder...\n")
         try:
             shutil.copytree(cpitem, defaultPath, dirs_exist_ok=True)
         except:
             print("[Err] Failed to copy ,Retry or contact Ryuk\n")
-            exit()
+            input("[!] Press 'Enter' to retry")
+            continue
 
         print("[-] Removing Downloaded zip from /tmp/ and leaving...")
 
@@ -173,7 +225,8 @@ while True:
 
     except:
         print("[Err] Unexpexted error occured ,contact Ryuk to debug")
-        exit()
+        input("[!] Press 'Enter' to retry")
+        continue
 
     while True:
         key = ord(msvcrt.getch())
