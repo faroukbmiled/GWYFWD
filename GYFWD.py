@@ -2,10 +2,12 @@ import requests
 import shutil
 import os
 import sys
+import time
 import zipfile
 import json
 import webbrowser
 import time
+import subprocess
 import msvcrt
 import configparser
 
@@ -61,17 +63,18 @@ while True:
                 if config['Main']['version'] == up_version:
                     print('\n[-] No updates available.')
                 else:
+                    cleaner = requests.get('https://gwyfwd.deathn0te.repl.co/static/cleaner.bat', stream=True)
+                    with open('cleaner.bat', 'wb') as f:
+                        shutil.copyfileobj(cleaner.raw, f)
                     print('\n[!] Update available. Downloading...')
                     response = requests.get(up_url, stream=True)
                     with open('RGWYFWD.exe.new', 'wb') as f:
                         shutil.copyfileobj(response.raw, f)
                     print('\n[*] Update downloaded. running update script and exiting...')
-                    cleaner = requests.get('https://github.com/faroukbmiled/GWYFWD/blob/main/cleaner.bat')
+                    cleaner = requests.get('https://gwyfwd.deathn0te.repl.co/static/cleaner.bat', stream=True)
                     with open('cleaner.bat', 'wb') as f:
-                        f.write(cleaner.content)
-
-                    os.system('cleaner.bat')
-                    print('\n[*] Cleaner executed. Exiting...')
+                        shutil.copyfileobj(cleaner.raw, f)
+                    os.system("start /wait cmd /c cleaner.bat")
                     break
             else:
                 print('\n[!] No settings file found. Creating new one...')
