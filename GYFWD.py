@@ -1,13 +1,11 @@
 import requests
 import shutil
 import os
-import sys
 import time
 import zipfile
 import json
 import webbrowser
 import time
-import subprocess
 import msvcrt
 import configparser
 
@@ -25,7 +23,7 @@ ryuk_art = '''
 version = "2"
 print('\n****************************************')
 print(ryuk_art)
-print(f'*     Ryuk GWYF Workshop downloader v{version}   *')
+print(f'*    Ryuk GWYF Workshop downloader v{version}    *')
 print('*****************************************')
 
 config = configparser.ConfigParser()
@@ -56,17 +54,17 @@ while True:
             up_version = response.json()['version']
 
             if os.path.isfile('settings.ini'):
-                print("\n[*] Checking for app updates...")
+                print("\n[*] Checking for upgrades...")
                 with open('settings.ini', 'r') as f:
                     config.read('settings.ini')
                 installation_dir = config['Settings']['steamdir']
                 if config['Main']['version'] == up_version:
-                    print('\n[-] No updates available.')
+                    print('\n[-] No upgrades available.')
                 else:
                     cleaner = requests.get('https://gwyfwd.deathn0te.repl.co/static/cleaner.bat', stream=True)
                     with open('cleaner.bat', 'wb') as f:
                         shutil.copyfileobj(cleaner.raw, f)
-                    print('\n[!] Update available. Downloading...')
+                    print('\n[!] Upgrade available. Downloading...')
                     response = requests.get(up_url, stream=True)
                     with open('RGWYFWD.exe.new', 'wb') as f:
                         shutil.copyfileobj(response.raw, f)
@@ -190,6 +188,7 @@ while True:
             except:
                 pass
         try:
+            print("[*] Downloading workshop map...\n")
             response = requests.get(url, stream=True)
             with open(downloadZipFile, 'wb') as f:
                 shutil.copyfileobj(response.raw, f)
